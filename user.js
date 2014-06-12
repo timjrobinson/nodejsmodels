@@ -12,15 +12,6 @@ User.prototype.changeName = function (name) {
     this.data.name = name;
 }
 
-User.prototype.save = function (callback) {
-    var self = this;
-    var sanitizedData = this.sanitize(this.data);
-    db.get('users', {id: this.data.id}).update(JSON.stringify(sanitizedData)).run(function (err, result) {
-        if (err) return callback(err);
-        callback(null, result); 
-    });
-}
-
 User.prototype.get = function (name) {
     return this.data[name];
 }
@@ -33,6 +24,15 @@ User.prototype.sanitize = function (data) {
     data = data || {};
     schema = schemas.user;
     return _.pick(_.defaults(data, schema), _.keys(schema)); 
+}
+
+User.prototype.save = function (callback) {
+    var self = this;
+    var sanitizedData = this.sanitize(this.data);
+    db.get('users', {id: this.data.id}).update(JSON.stringify(sanitizedData)).run(function (err, result) {
+        if (err) return callback(err);
+        callback(null, result); 
+    });
 }
 
 User.findById = function (id, callback) {
