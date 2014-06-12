@@ -28,8 +28,8 @@ User.prototype.sanitize = function (data) {
 
 User.prototype.save = function (callback) {
     var self = this;
-    var sanitizedData = this.sanitize(this.data);
-    db.get('users', {id: this.data.id}).update(JSON.stringify(sanitizedData)).run(function (err, result) {
+    this.data = this.sanitize(this.data);
+    db.get('users', {id: this.data.id}).update(JSON.stringify(this.data)).run(function (err, result) {
         if (err) return callback(err);
         callback(null, result); 
     });
